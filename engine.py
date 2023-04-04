@@ -5,7 +5,7 @@ from input_handlers import handle_keys
 from entity import Entity, get_blocking_entities_at_location
 from map_objects.game_map import GameMap
 from death_functions import kill_monster, kill_player
-from render_functions import clear_all, render_all
+from render_functions import clear_all, render_all, RenderOrder
 from game_states import GameStates
 from fov_functions import initialize_fov, recompute_fov
 
@@ -34,7 +34,7 @@ def main():
     }
 
     fighter_component = Fighter(hp=30, defense=2, power=5)
-    player = Entity(0, 0, '@', libtcod.white, 'Player', blocks=True, fighter=fighter_component)
+    player = Entity(0, 0, '@', libtcod.white, 'Player', blocks=True, render_order=RenderOrder.ACTOR, fighter=fighter_component)
 
     entities = [player]
 
@@ -62,7 +62,7 @@ def main():
         if fov_recompute:
             recompute_fov(fov_map, player.x, player.y, fov_radius, fov_light_walls, fov_algorithm)
 
-        render_all(con, entities, game_map, fov_map, fov_recompute, screen_width, screen_height, colors)
+        render_all(con, entities, player, game_map, fov_map, fov_recompute, screen_width, screen_height, colors)
 
         fov_recompute = False
 
