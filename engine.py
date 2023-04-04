@@ -13,7 +13,7 @@ from fov_functions import initialize_fov, recompute_fov
 
 def main():
     screen_width = 80
-    screen_height = 45
+    screen_height = 50
 
     bar_width = 20
     panel_height = 7
