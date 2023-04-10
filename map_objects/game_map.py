@@ -6,6 +6,8 @@ from components.fighter import Fighter
 from render_functions import RenderOrder
 
 from entity import Entity
+from components.item import Item
+from components.item_functions import heal
 from map_objects.tile import Tile
 from map_objects.rectangle import Rect
 
@@ -104,15 +106,6 @@ class GameMap:
             x = randint(room.x1 + 1, room.x2 - 1)
             y = randint(room.y1 + 1, room.y2 - 1)
 
-        for i in range(number_of_items):
-            x = randint(room.x1 + 1, room.x2 - 1)
-            y = randint(room.y1 + 1, room.y2 - 1)
-
-            if not any([entity for entity in entities if entity.x == x and entity.y == y]):
-                item = Entity(x, y, '+', libtcod.green, 'Healing Potion', render_order=RenderOrder.ITEM)
-
-                entities.append(item)
-
             if not any([entity for entity in entities if entity.x == x and entity.y == y]):
                 if randint(0, 100) < 80:
                     fighter_component = Fighter(hp=10, defense=0, power=3)
@@ -126,6 +119,17 @@ class GameMap:
                                      render_order=RenderOrder.ACTOR, ai=ai_component)
 
                 entities.append(monster)
+
+        for i in range(number_of_items):
+            x = randint(room.x1 + 1, room.x2 - 1)
+            y = randint(room.y1 + 1, room.y2 - 1)
+
+            if not any([entity for entity in entities if entity.x == x and entity.y == y]):
+                item_component = Item(use_function=heal, amount=4)
+                item = Entity(x, y, '!', libtcod.violet, 'Healing Potion', render_order=RenderOrder.ITEM,
+                              item=item_component)
+
+                entities.append(item)
 
     def is_blocked(self, x, y):
         if self.tiles[x][y].blocked:
